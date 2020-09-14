@@ -1,0 +1,2 @@
+A JSON file (JavaScript Object Notation) is standard interchange format, uses human-readable text. 
+Mostly used for exchanging data between web or mobile application and API server.

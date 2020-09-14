@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:compression="http://www.mulesoft.org/schema/mule/compression"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/compression http://www.mulesoft.org/schema/mule/compression/current/mule-compression.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="c85353b6-807f-4f33-b315-0b0291a27669" />
+	<configuration-properties doc:name="Configuration properties" doc:id="709c1c63-2615-41f1-9b96-4b77675ad0c0" file="config.yaml" />
+	<flow name="compression-flow" doc:id="edc769e8-b6de-40a4-87fc-ab9582f055a1" >
+		<file:listener doc:name="On New or Updated File" doc:id="ddc30f96-e018-469a-ac41-6ba97babd19f" config-ref="File_Config" directory="${path.input.decompressed}" recursive="false" autoDelete="true">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</file:listener>
+		<logger level="INFO" doc:name="Log Start" doc:id="aa63b7f4-8565-4f91-bdc9-a61c8313b9a6" message="Start" category="START"/>
+		<compression:compress doc:name="Compress" doc:id="65f418ed-0b6d-4efe-bb3b-1146412a925c" >
+			<compression:compressor >
+				<compression:zip-compressor />
+			</compression:compressor>
+		</compression:compress>
+		<ee:transform doc:name="to Base64" doc:id="023e78e6-a9f0-4340-95d2-709ff2f48bad" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+import toBase64 from dw::core::Binaries
+---
+toBase64(payload)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<file:write doc:name="Write" doc:id="fdf82917-2cc6-44c1-9050-fc4fdaff3af1" config-ref="File_Config" path="#[Mule::p('path.output.compressed') ++ &quot;\compressed.txt&quot;]" mode="CREATE_NEW"/>
+		<logger level="INFO" doc:name="Log End" doc:id="d2e82042-5253-4e5d-b427-16ff07b4bbd4" message="#[payload]" category="END"/>
+	</flow>
+	<flow name="decompression-flow" doc:id="0d348b4e-8e02-4f76-a6b8-dce98f473c7a" >
+		<file:listener doc:name="On New or Updated File" doc:id="85ab59e1-2311-4839-9046-86fed5fbfba0" directory="${path.input.compressed}" autoDelete="true">
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</file:listener>
+		<logger level="INFO" doc:name="Log Start" doc:id="47955b50-1f14-4694-872e-cc23895e709c" message="Start"/>
+		<ee:transform doc:name="from Base64" doc:id="8f786559-9498-466f-a912-c42ebb398c49" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+import fromBase64 from dw::core::Binaries
+---
+fromBase64(payload)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<compression:decompress doc:name="Decompress" doc:id="5c48fa08-e23a-42de-98e7-2c0dd39aed24" outputMimeType="text/plain">
+			<compression:decompressor >
+				<compression:zip-decompressor />
+			</compression:decompressor>
+		</compression:decompress>
+		<file:write doc:name="Write" doc:id="a6637136-d821-4514-a94e-29958900f2e4" config-ref="File_Config" path="${path.output.decompressed}"/>
+		<logger level="INFO" doc:name="Log End" doc:id="4145b080-c40c-4aa3-9c4c-48c3c1f0195c" message="End" category="END"/>
+	</flow>
+</mule>

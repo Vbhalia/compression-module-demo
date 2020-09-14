@@ -1,0 +1,2 @@
+A CSV file (Comma Separated Values File) is commonly used by spreadsheet programs such as Microsoft Excel or OpenOffice Calc. 
+If you nees to test download of a file which contains plain text data sets separated by commas (database) just ddownload this file.

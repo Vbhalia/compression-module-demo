@@ -1,0 +1,2 @@
+A ZIP file (Zipped File) is an archive that contains one or more files compressed or “zipped” using Zip compression. 
+It allows you to extract seperate files without compressing or decompressing the entire archive.

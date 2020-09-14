@@ -1,0 +1,16 @@
+path:
+  input: 
+    decompressed: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\input\\decompressed"
+    compressed: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\input\\compressed"
+    zipped: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\input\\zipped"
+    unzipped: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\input\\unzipped"
+  processed: 
+    compressed: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\processed\\compressed"
+    decompressed: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\processed\\decompressed"
+    zipped: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\processed\\zipped"
+    unzipped: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\processed\\unzipped"
+  output: 
+    compressed: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\output\\compressed"
+    decompressed: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\output\\decompressed\\decompressed.txt"
+    unzipped: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\output\\unzipped"
+    zipped: "C:\\Users\\Documents\\mule\\compression-module-demo\\src\\main\\resources\\output\\zipped"
